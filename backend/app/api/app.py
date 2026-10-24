@@ -14,6 +14,7 @@ AWS Lambda handler: ``app.api.app.handler`` (Mangum-wrapped).
 from __future__ import annotations
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.errors import register_exception_handlers
 from app.api.routes import router
@@ -26,6 +27,13 @@ def create_app() -> FastAPI:
         title="POS MVP API",
         version="0.1.0",
         description="Punto de venta para tienda de barrio (MVP).",
+    )
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
     register_exception_handlers(app)
     app.include_router(router)

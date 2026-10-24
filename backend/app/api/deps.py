@@ -27,15 +27,39 @@ from app.services.sales import SalesService
 
 @lru_cache(maxsize=1)
 def _default_repository() -> PosRepository:
-    """Build (once) the production DynamoDB repository.
+    """Build (once) the repository.
 
-    Imported lazily and cached so importing this module never requires AWS and
-    the boto3-backed repository is created only when actually used.
+    Uses DynamoDB only if explicitly configured via POS_STORAGE=dynamodb;
+    otherwise defaults to the in-memory repository for local development and demos.
     """
+    import os
 
-    from app.repository.dynamodb import DynamoDBPosRepository
+    if os.environ.get("POS_STORAGE") == "dynamodb":
+        from app.repository.dynamodb import DynamoDBPosRepository
+        return DynamoDBPosRepository()
 
-    return DynamoDBPosRepository()
+    from app.repository.memory import InMemoryPosRepository
+
+    repo = InMemoryPosRepository()
+    catalog = CatalogService(repo)
+    sample_products = [
+        {"sku": "COF-001", "name": "Café Especial 250g", "price": "18000.00", "stock": 25},
+        {"sku": "GAL-001", "name": "Galletas de Avena Artesanal", "price": "3500.00", "stock": 40},
+        {"sku": "CHO-001", "name": "Barra Chocolate 70%", "price": "6000.00", "stock": 18},
+        {"sku": "LEC-001", "name": "Bebida de Almendras 1L", "price": "12000.00", "stock": 3},
+        {"sku": "TE-001", "name": "Té Verde Orgánico", "price": "4500.00", "stock": 30},
+    ]
+    for p in sample_products:
+        try:
+            catalog.create_product(
+                sku=p["sku"],
+                name=p["name"],
+                price=p["price"],
+                stock=p["stock"],
+            )
+        except Exception:
+            pass
+    return repo
 
 
 def get_repository() -> PosRepository:
