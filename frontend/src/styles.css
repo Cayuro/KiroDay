@@ -1,0 +1,431 @@
+/* Plain CSS. Priorities: large touch targets, high contrast, clear Spanish UI.
+   No heavy UI library, so a cashier-friendly layout stays simple and fast. */
+
+:root {
+  --color-bg: #f4f6f8;
+  --color-surface: #ffffff;
+  --color-text: #1a1f24;
+  --color-muted: #5b6771;
+  --color-primary: #1565c0;
+  --color-primary-dark: #0d47a1;
+  --color-secondary: #e3eaf2;
+  --color-danger: #c62828;
+  --color-danger-dark: #8e0000;
+  --color-success: #2e7d32;
+  --color-border: #d4dae0;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  font-size: 18px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+/* Visible focus for keyboard users everywhere. */
+:focus-visible {
+  outline: 3px solid var(--color-primary-dark);
+  outline-offset: 2px;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.app-header {
+  background: var(--color-surface);
+  border-bottom: 2px solid var(--color-border);
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tab {
+  position: relative;
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 0.75rem 1.1rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  background: var(--color-secondary);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.tab-active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.cart-badge {
+  display: inline-block;
+  margin-left: 0.4rem;
+  min-width: 1.5rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--color-danger);
+  color: #fff;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.app-main {
+  padding: 1.5rem;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.view h1 {
+  margin-top: 0;
+}
+
+.view-intro {
+  color: var(--color-muted);
+  margin-top: -0.5rem;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+/* Buttons: large and clearly labeled. */
+.btn {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-lg {
+  font-size: 1.1rem;
+  padding: 0.85rem 1.4rem;
+}
+
+.btn-xl {
+  font-size: 1.35rem;
+  padding: 1.1rem 1.6rem;
+  width: 100%;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+  color: var(--color-primary-dark);
+}
+
+.btn-danger {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: var(--color-danger-dark);
+}
+
+/* Forms */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field label,
+.payment-methods legend {
+  font-weight: 600;
+}
+
+.field input,
+.qty-input {
+  font-size: 1.05rem;
+  padding: 0.6rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.field-actions {
+  justify-content: flex-end;
+}
+
+.toolbar {
+  margin-bottom: 1rem;
+}
+
+/* Tables */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 0.7rem 0.6rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table th {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-muted);
+}
+
+.qty-input {
+  width: 5rem;
+}
+
+.empty {
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.muted {
+  color: var(--color-muted);
+}
+
+/* Tags */
+.tag {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.tag-danger {
+  background: #fdecea;
+  color: var(--color-danger-dark);
+}
+
+/* Banners / alerts */
+.banner {
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius);
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.banner-info {
+  background: #e8f0fe;
+  color: var(--color-primary-dark);
+}
+
+.banner-success {
+  background: #e6f4ea;
+  color: var(--color-success);
+}
+
+.banner-error {
+  background: #fdecea;
+  color: var(--color-danger-dark);
+}
+
+/* Checkout */
+.payment-methods {
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.radio-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.1rem;
+  margin-right: 1.5rem;
+  cursor: pointer;
+}
+
+.radio-option input {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.checkout-total {
+  font-size: 1.25rem;
+}
+
+/* Receipt */
+.receipt-meta {
+  margin: 0.25rem 0;
+}
+
+.receipt-total {
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+/* Promotions */
+.promo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.promo-card {
+  margin-bottom: 0;
+}
+
+.promo-name {
+  color: var(--color-primary-dark);
+}
+
+.promo-prices {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+}
+
+.price-original {
+  text-decoration: line-through;
+  color: var(--color-muted);
+}
+
+.price-combo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-success);
+}
+
+.promo-saving {
+  font-weight: 700;
+  color: var(--color-success);
+}
+
+/* The cashier pitch: visually prominent so it's easy to read aloud. */
+.pitch {
+  margin: 1rem 0 0;
+  padding: 1rem 1.1rem;
+  background: #fff8e1;
+  border-left: 6px solid #f9a825;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
+.pitch-label {
+  display: block;
+  font-style: normal;
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #8a6d00;
+  margin-bottom: 0.35rem;
+}
+
+/* Diagnostic */
+.metric-value {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+  margin: 0.25rem 0;
+}
+
+.critical-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.recommendation .reco-text {
+  font-size: 1.15rem;
+}
+
+/* Dialog */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 100;
+}
+
+.dialog {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.dialog-title {
+  margin-top: 0;
+}
+
+.dialog-message {
+  font-size: 1.1rem;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
