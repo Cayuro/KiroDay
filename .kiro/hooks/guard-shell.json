@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "guard-dangerous-shell",
+      "trigger": "PreToolUse",
+      "matcher": "execute_bash",
+      "action": {
+        "type": "command",
+        "command": "evt=$(cat); if printf '%s' \"$evt\" | grep -Eq 'rm +-rf +[/~]|mkfs|dd +if=|:\\(\\)\\{'; then echo 'BLOQUEADO: patron peligroso detectado en el comando.' >&2; exit 2; fi; exit 0"
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+# EJEMPLO para el taller (referencia, NO config activa).
+# El permissions.yaml REAL va fuera del repo:
+#   ~/.kiro/settings/permissions.yaml            (todos tus proyectos)
+#   ~/.kiro/workspace-roots/<hash>/permissions.yaml  (solo este proyecto)
+# Recordatorio: deny > ask > allow. Un deny gana sobre cualquier allow.
+
+rules:
+  - capability: fs_read                 # jamás leer secretos, en todo proyecto
+    match: ["**/.env", "**/.env.*", "**/*.pem", "**/*.key", "secrets/**"]
+    effect: deny
+
+  - capability: shell                   # jamás comandos destructivos
+    match: ["rm -rf *", "sudo *"]
+    effect: deny
+
+  - capability: shell                   # herramientas de dev habituales
+    match: ["git *", "npm *", "npx *", "pytest *"]
+    effect: allow
+
+  - capability: fs_read                 # leer el proyecto, libre
+    effect: allow
+

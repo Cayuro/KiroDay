@@ -1,0 +1,42 @@
+{
+  "name": "deploy-ops",
+  "description": "Operador de despliegue del POS: publica con comandos acotados (git/npm/aws). Sin acciones destructivas ni acceso a secretos.",
+  "prompt": "Eres el operador de despliegue del POS. Tu trabajo es publicar la aplicación usando comandos de git, npm y AWS. Explicas en español cada paso antes de ejecutarlo. Nunca ejecutas comandos destructivos ni accedes a archivos de secretos; si algo lo requiere, lo reportas en vez de forzarlo.",
+  "tools": ["fs_read", "grep", "glob", "execute_bash"],
+  "allowedTools": ["fs_read", "grep", "glob"],
+  "toolsSettings": {
+    "shell": {
+      "allowedCommands": [
+        "git .*",
+        "npm .*",
+        "npx .*",
+        "aws .*"
+      ],
+      "autoAllowReadonly": true
+    }
+  },
+  "permissions": {
+    "rules": [
+      {
+        "capability": "fs_read",
+        "match": ["**/.env", "**/.env.*", "**/*.pem", "**/*.key", "secrets/**"],
+        "effect": "deny"
+      },
+      {
+        "capability": "shell",
+        "match": ["rm -rf *", "sudo *", "mkfs*", "dd if=*"],
+        "effect": "deny"
+      },
+      {
+        "capability": "shell",
+        "match": ["git *", "npm *", "npx *", "aws *"],
+        "effect": "allow"
+      },
+      {
+        "capability": "fs_read",
+        "effect": "allow"
+      }
+    ],
+    "policies": ["read-only-shell"]
+  }
+}

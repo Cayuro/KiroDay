@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "qa-tests-on-write",
+      "trigger": "PostToolUse",
+      "matcher": "fs_write",
+      "action": {
+        "type": "command",
+        "command": "if [ -f pytest.ini ] || [ -d tests ]; then pytest -q 2>&1 | tail -20; else echo 'Sin tests aún — nada que correr.'; fi"
+      }
+    }
+  ]
+}

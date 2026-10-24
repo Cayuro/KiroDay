@@ -1,0 +1,1 @@
+"""POS MVP backend package."""
