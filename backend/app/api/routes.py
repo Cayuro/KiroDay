@@ -13,6 +13,7 @@ from fastapi import APIRouter, Depends, Query, status
 
 from app.api.deps import (
     get_catalog_service,
+    get_copilot_service,
     get_report_service,
     get_sales_service,
 )
@@ -21,13 +22,17 @@ from app.api.schemas import (
     ProductCreateRequest,
     ProductResponse,
     ProductUpdateRequest,
+    PromoComboResponse,
+    ResumenGerencialResponse,
     SaleCreateRequest,
     SaleItemResponse,
     SaleResponse,
 )
 from app.models.product import Product
 from app.models.sale import Sale
+from app.models.copilot import PromoCombo, ResumenGerencial
 from app.services.catalog import CatalogService
+from app.services.copilot import CopilotService
 from app.services.report import DailyReport, ReportService
 from app.services.sales import SalesService
 
@@ -152,3 +157,50 @@ def daily_report(
     """Return the daily sales report; ``date`` is optional (Requirements 4.1, 4.4, 4.5)."""
 
     return _report_response(service.daily_report(date))
+
+
+# --- SmartPOS Copilot routes (US-1, US-2) -----------------------------------
+
+
+def _promo_combo_response(combo: PromoCombo) -> PromoComboResponse:
+    """Shape a domain :class:`PromoCombo` into its response schema."""
+    return PromoComboResponse(
+        nombre=combo.nombre,
+        skus=list(combo.skus),
+        precio_original=str(combo.precio_original),
+        precio_combo=str(combo.precio_combo),
+        ahorro=str(combo.ahorro),
+        pitch_cajero=combo.pitch_cajero,
+    )
+
+
+def _resumen_gerencial_response(resumen: ResumenGerencial) -> ResumenGerencialResponse:
+    """Shape a domain :class:`ResumenGerencial` into its response schema."""
+    return ResumenGerencialResponse(
+        fecha=resumen.fecha,
+        total_ventas=str(resumen.total_ventas),
+        productos_criticos=list(resumen.productos_criticos),
+        recomendacion_estrategica=resumen.recomendacion_estrategica,
+    )
+
+
+@router.get("/copilot/promociones", response_model=list[PromoComboResponse])
+def get_promociones(
+    limite: int = Query(default=5, ge=1, le=100, description="Maximum combos to return"),
+    service: CopilotService = Depends(get_copilot_service),
+) -> list[PromoComboResponse]:
+    """Return dynamic combo suggestions based on current inventory (US-1)."""
+
+    combos = service.generar_promociones(limite_combos=limite)
+    return [_promo_combo_response(c) for c in combos]
+
+
+@router.get("/copilot/diagnostico-hoy", response_model=ResumenGerencialResponse)
+def get_diagnostico_hoy(
+    date: str | None = Query(default=None, description="YYYY-MM-DD; defaults to today"),
+    service: CopilotService = Depends(get_copilot_service),
+) -> ResumenGerencialResponse:
+    """Return the managerial diagnostic with stock alerts and recommendations (US-2)."""
+
+    resumen = service.analisis_gerencial(fecha=date)
+    return _resumen_gerencial_response(resumen)

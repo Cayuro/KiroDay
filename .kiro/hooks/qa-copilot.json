@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "qa-copilot-verify",
+      "trigger": "PostFileSave",
+      "description": "Audita automáticamente la sintaxis de CopilotService cada vez que se guarda copilot.py",
+      "matcher": "backend/app/services/copilot\\.py",
+      "action": {
+        "type": "command",
+        "command": "cd /home/juanes/Desktop/KiroDay/KiroDay/backend && python3 -c \"from app.services.copilot import CopilotService; print('✓ CopilotService syntax OK')\""
+      }
+    }
+  ]
+}

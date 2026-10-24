@@ -109,3 +109,26 @@ class DailyReportResponse(BaseModel):
     sales_count: int
     total: str
     by_payment_method: dict[str, str]
+
+
+# --- SmartPOS Copilot schemas -------------------------------------------
+
+
+class PromoComboResponse(BaseModel):
+    """A suggested promotional bundle (money as decimal strings)."""
+
+    nombre: str
+    skus: list[str]
+    precio_original: str  # Decimal as string
+    precio_combo: str
+    ahorro: str
+    pitch_cajero: str
+
+
+class ResumenGerencialResponse(BaseModel):
+    """Daily managerial summary (total_ventas as decimal string)."""
+
+    fecha: str
+    total_ventas: str  # Decimal as string
+    productos_criticos: list[str]
+    recomendacion_estrategica: str

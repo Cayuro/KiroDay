@@ -19,6 +19,7 @@ from fastapi import Depends
 
 from app.repository.base import PosRepository
 from app.services.catalog import CatalogService
+from app.services.copilot import CopilotService
 from app.services.inventory import InventoryService
 from app.services.report import ReportService
 from app.services.sales import SalesService
@@ -69,3 +70,12 @@ def get_report_service(
     """Build a :class:`ReportService` over the resolved repository."""
 
     return ReportService(repository)
+
+
+def get_copilot_service(
+    catalog: CatalogService = Depends(get_catalog_service),
+    report: ReportService = Depends(get_report_service),
+) -> CopilotService:
+    """Build a :class:`CopilotService` composed of CatalogService and ReportService."""
+
+    return CopilotService(catalog, report)
